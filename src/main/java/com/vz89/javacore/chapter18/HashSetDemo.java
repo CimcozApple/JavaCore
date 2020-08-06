@@ -12,7 +12,6 @@ public class HashSetDemo {
         hs.add("Эпсилон");
         hs.add("Омега");
 
-
         System.out.println(hs);
     }
 }
