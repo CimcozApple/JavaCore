@@ -1,12 +1,12 @@
 package main.java.com.vz89.javacore.chapter18;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
-public class HashMapDemo {
+public class TreeMapDemo {
     public static void main(String[] args) {
-        HashMap<String, Double> hm = new HashMap<>();
+        TreeMap<String, Double> hm = new TreeMap<>();
 
         hm.put("John Dow", 3434.34);
         hm.put("Tom Smith", 123.22);
@@ -26,6 +26,5 @@ public class HashMapDemo {
         double balance = hm.get("John Dow");
         hm.put("John Dow", balance + 1000);
         System.out.println("Новый остаток на счету Джона: " + hm.get("John Dow"));
-
     }
 }
