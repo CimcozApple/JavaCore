@@ -1,7 +1,5 @@
 package main.java.com.vz89.javacore.chapter18;
 
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.ArrayList;
 import java.util.Spliterator;
 
