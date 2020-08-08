@@ -16,5 +16,6 @@ public class ArrayDequeDemo {
 
         while (adq.peek() != null) System.out.println(adq.pop() + " ");
         System.out.println();
+
     }
 }
