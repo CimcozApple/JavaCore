@@ -25,6 +25,5 @@ public class SpliteratorDemo {
         spliterator = sqrs.spliterator();
         spliterator.forEachRemaining(System.out::println);
 
-
     }
 }
