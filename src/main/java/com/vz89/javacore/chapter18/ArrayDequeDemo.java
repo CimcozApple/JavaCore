@@ -13,7 +13,6 @@ public class ArrayDequeDemo {
         adq.push("F");
 
         System.out.println("Извлечение из стека: ");
-
         while (adq.peek() != null) System.out.println(adq.pop() + " ");
         System.out.println();
 
