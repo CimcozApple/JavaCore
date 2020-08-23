@@ -11,6 +11,6 @@ public class Hypot {
 
         hypot = sqrt(Math.pow(side1,2) + pow(side2,2));
 
-        System.out.println("При заданной длине сторон " + side1 + " и "+ side2 + "гипотенуза равна " + hypot);
+        System.out.println("При заданной длине сторон " + side1 + " и "+ side2 + " гипотенуза равна " + hypot);
     }
 }
