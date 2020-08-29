@@ -36,9 +36,7 @@ public class SerializationDemo {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("serial"))) {
             MyClass object2 = (MyClass)objectInputStream.readObject();
             System.out.println("object2: " + object2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
