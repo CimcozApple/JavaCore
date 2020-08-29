@@ -4,7 +4,7 @@ import java.io.File;
 
 public class DirList {
     public static void main(String[] args) {
-        String dirName = "/java";
+        String dirName = "/Program Files";
         File f1 = new File(dirName);
         if (f1.isDirectory()) {
             System.out.println("Каталог " + dirName);
