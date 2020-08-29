@@ -19,7 +19,7 @@ class OnlyExt implements FilenameFilter {
 
 public class DirListOnly {
     public static void main(String[] args) {
-        String dirname = "/Program files";
+        String dirname = "/Program Files";
         File f1 = new File(dirname);
         FilenameFilter only = new OnlyExt("Windows");
         String[] s = f1.list(only);
