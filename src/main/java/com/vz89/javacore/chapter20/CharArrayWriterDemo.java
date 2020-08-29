@@ -1,14 +1,13 @@
 package main.java.com.vz89.javacore.chapter20;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
-class ByteArrayOutputStreamDemo {
+public class CharArrayWriterDemo {
     public static void main(String[] args) {
-        ByteArrayOutputStream f = new ByteArrayOutputStream();
+        CharArrayWriter f = new CharArrayWriter();
         String s = "Эти данные должны быть выведены в массив";
-        byte[] buf = s.getBytes();
+        char[] buf = new char[s.length()];
+        s.getChars(0,s.length(),buf,0);
 
         try {
             f.write(buf);
@@ -20,11 +19,11 @@ class ByteArrayOutputStreamDemo {
         System.out.println("Буфер в виде символьной строки");
         System.out.println(f.toString());
         System.out.println("В массив");
-        byte[] b = f.toByteArray();
-        for (byte value : b) System.out.print((char) value);
+        char[] c = f.toCharArray();
+        for (char value : c) System.out.print(value);
 
-        System.out.println("Поток вывода типа OutputStream()");
-        try (FileOutputStream f2 = new FileOutputStream("test.txt"))
+        System.out.println("Поток вывода типа FileWriter()");
+        try (FileWriter f2 = new FileWriter("testwr.txt"))
         {
             f.writeTo(f2);
         } catch (IOException e) {
