@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
-public class StreamDemo9 {
+public class StreamDemo10 {
     public static void main(String[] args) {
         ArrayList<String> list = new ArrayList<>();
         list.add("Бетта");
@@ -15,8 +15,14 @@ public class StreamDemo9 {
         list.add("Омега");
 
         Stream<String> myStream = list.stream();
-        Spliterator<String> itr = myStream.spliterator();
-        while (itr.tryAdvance(System.out::println));
-    }
+        Spliterator<String> splitItr = myStream.spliterator();
+        Spliterator<String> splitItr2 =splitItr.trySplit();
+        if (splitItr2 != null) {
+            System.out.println("Spliterator 2 result:");
+            splitItr2.forEachRemaining(System.out::println);
+        }
 
+        System.out.println("Spliterator result");
+        splitItr.forEachRemaining(System.out::println);
+    }
 }
