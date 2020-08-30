@@ -45,16 +45,19 @@ class NamePhone {
 public class StreamDemo5 {
     public static void main(String[] args) {
         ArrayList<NamePhoneEmail> namePhoneEmails = new ArrayList<>();
-        namePhoneEmails.add(new NamePhoneEmail("Bob","12345","bob@bob.ru"));
-        namePhoneEmails.add(new NamePhoneEmail("James","34567","JAmes@JAmes.ru"));
-        namePhoneEmails.add(new NamePhoneEmail("Kate","312521","Kate@JAmes.ru"));
+        namePhoneEmails.add(new NamePhoneEmail("Bob", "12345", "bob@bob.ru"));
+        namePhoneEmails.add(new NamePhoneEmail("James", "34567", "JAmes@JAmes.ru"));
+        namePhoneEmails.add(new NamePhoneEmail("Kate", "312521", "Kate@JAmes.ru"));
 
         System.out.println("Исходные элементы из списка namePhoneEmails: ");
         namePhoneEmails.forEach(System.out::println);
 
-        Stream<NamePhone> nameAndPhone = namePhoneEmails.stream().map(a -> new NamePhone(a.name,a.phonenum));
+        Stream<NamePhone> nameAndPhone = namePhoneEmails.stream().map(a -> new NamePhone(a.name, a.phonenum));
         System.out.println("Список имен и номера телефонов: ");
         nameAndPhone.forEach(System.out::println);
+
+        Stream<NamePhone> nameAndPhoneFilter = namePhoneEmails.stream().filter(name -> name.name.equals("Bob"))
+                .map(a -> new NamePhone(a.name, a.phonenum));
 
     }
 
