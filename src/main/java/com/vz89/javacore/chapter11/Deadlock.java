@@ -57,6 +57,9 @@ public class Deadlock implements Runnable {
     }
 
     public static void main(String[] args) {
+        String a = "abc";
+        a = "asasg";
+
         new Deadlock();
     }
 }
