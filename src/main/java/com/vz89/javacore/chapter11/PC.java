@@ -2,15 +2,34 @@ package main.java.com.vz89.javacore.chapter11;
 
 class Q {
     private int n;
+    boolean valueSet = false;
 
     synchronized int get() {
-        System.out.println("Получено " + n);
+        while (!valueSet) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Получено " + n + Thread.currentThread().getName());
+        valueSet = false;
+        notify();
         return n;
     }
 
     synchronized void put(int n) {
+        while (valueSet) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         this.n = n;
-        System.out.println("Отправлено " + n);
+        valueSet = true;
+        System.out.println("Отправлено " + n + Thread.currentThread().getName());
+        notify();
     }
 }
 
