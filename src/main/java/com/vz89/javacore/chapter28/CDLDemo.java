@@ -27,9 +27,12 @@ class MyThread implements Runnable {
 
     @Override
     public void run() {
-        for (int i=1000; i>0 ;i--) {
-            System.out.println(i);
-            latch.countDown();
+        for (int i = 1000; i > 0; i--) {
+
+            if (latch.getCount() != 0) {
+                latch.countDown();
+                System.out.println(i);
+            } else break;
         }
     }
 }
