@@ -2,6 +2,7 @@ package main.java.com.vz89.javacore.chapter28;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Phaser;
 
 class Foo {
     public void first() {
@@ -18,56 +19,92 @@ class Foo {
 }
 
 public class HomeTaskOne {
-    public static void main(String[] args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+    public static void main(String[] args) throws InterruptedException {
         Foo foo = new Foo();
-        A a = new A(foo);
 
-        executorService.execute(new A(foo));
-        executorService.execute(new B(foo));
-        executorService.execute(new C(foo));
+        Phaser phaser = new Phaser(1) {
+            @Override
+            protected boolean onAdvance(int phase, int registeredParties) {
+                if (phase == 2 || registeredParties == 0) return true;
+                return false;
+            }
+        };
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
 
+        executorService.execute(new B(foo, phaser));
+        executorService.execute(new A(foo, phaser));
+        executorService.execute(new C(foo, phaser));
+
+        while (!phaser.isTerminated()) {
+            phaser.arriveAndAwaitAdvance();
+        }
         executorService.shutdown();
     }
-
-
 }
 
 class A implements Runnable {
     Foo foo;
+    Phaser phaser;
 
-    public A(Foo foo) {
+    public A(Foo foo, Phaser phaser) {
         this.foo = foo;
+        this.phaser = phaser;
+        phaser.register();
     }
 
     @Override
     public void run() {
-        foo.first();
+        while (!phaser.isTerminated()) {
+            if (phaser.getPhase() == 0) {
+                foo.first();
+                phaser.arriveAndDeregister();
+                break;
+            } else phaser.arriveAndAwaitAdvance();
+        }
     }
 }
 
 class B implements Runnable {
     Foo foo;
+    Phaser phaser;
+
+    public B(Foo foo, Phaser phaser) {
+        this.foo = foo;
+        this.phaser = phaser;
+        phaser.register();
+    }
 
     @Override
     public void run() {
-        foo.second();
+        while (!phaser.isTerminated()) {
+            if (phaser.getPhase() == 1) {
+                foo.second();
+                phaser.arriveAndDeregister();
+                break;
+            } else phaser.arriveAndAwaitAdvance();
+        }
     }
 
-    public B(Foo foo) {
-        this.foo = foo;
-    }
 }
 
 class C implements Runnable {
     Foo foo;
+    Phaser phaser;
 
-    public C(Foo foo) {
+    public C(Foo foo, Phaser phaser) {
         this.foo = foo;
+        this.phaser = phaser;
+        phaser.register();
     }
 
     @Override
     public void run() {
-        foo.third();
+        while (!phaser.isTerminated()) {
+            if (phaser.getPhase() == 2) {
+                foo.third();
+                phaser.arriveAndDeregister();
+                break;
+            } else phaser.arriveAndAwaitAdvance();
+        }
     }
 }
