@@ -84,7 +84,6 @@ class B implements Runnable {
             } else phaser.arriveAndAwaitAdvance();
         }
     }
-
 }
 
 class C implements Runnable {

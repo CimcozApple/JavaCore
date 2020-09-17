@@ -10,7 +10,7 @@ public class SimpExec {
         CountDownLatch countDownLatch2 = new CountDownLatch(5);
         CountDownLatch countDownLatch3 = new CountDownLatch(5);
         CountDownLatch countDownLatch4 = new CountDownLatch(5);
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         executorService.execute(new MyThread2(countDownLatch1,"A"));
         executorService.execute(new MyThread2(countDownLatch2,"B"));
