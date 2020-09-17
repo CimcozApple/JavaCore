@@ -2,108 +2,109 @@ package main.java.com.vz89.javacore.chapter28;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Phaser;
 
 class Foo {
-    public void first() {
-        System.out.print("first");
+    int num = 3;
+    int i = 1;
+
+    public synchronized void first() {
+        while (i <= num) {
+            if (i == 1) {
+                System.out.print("first");
+                i++;
+                notifyAll();
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    public void second() {
-        System.out.print("second");
+    public synchronized void second() {
+        while (i <= num) {
+            if (i == 2) {
+                System.out.print("second");
+                i++;
+                notifyAll();
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    public void third() {
-        System.out.print("third");
+    public synchronized void third() {
+        while (i <= num) {
+            if (i == 3) {
+                System.out.print("third");
+                i++;
+                notifyAll();
+            } else {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
 
 public class HomeTaskOne {
     public static void main(String[] args) throws InterruptedException {
         Foo foo = new Foo();
-
-        Phaser phaser = new Phaser(1) {
-            @Override
-            protected boolean onAdvance(int phase, int registeredParties) {
-                if (phase == 2 || registeredParties == 0) return true;
-                return false;
-            }
-        };
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-        executorService.execute(new B(foo, phaser));
-        executorService.execute(new A(foo, phaser));
-        executorService.execute(new C(foo, phaser));
+        executorService.execute(new C(foo));
+        executorService.execute(new B(foo));
+        executorService.execute(new A(foo));
 
-        while (!phaser.isTerminated()) {
-            phaser.arriveAndAwaitAdvance();
-        }
+
         executorService.shutdown();
     }
 }
 
 class A implements Runnable {
     Foo foo;
-    Phaser phaser;
 
-    public A(Foo foo, Phaser phaser) {
+    public A(Foo foo) {
         this.foo = foo;
-        this.phaser = phaser;
-        phaser.register();
     }
 
     @Override
     public void run() {
-        while (!phaser.isTerminated()) {
-            if (phaser.getPhase() == 0) {
-                foo.first();
-                phaser.arriveAndDeregister();
-                break;
-            } else phaser.arriveAndAwaitAdvance();
-        }
+        foo.first();
     }
 }
 
 class B implements Runnable {
     Foo foo;
-    Phaser phaser;
 
-    public B(Foo foo, Phaser phaser) {
+    public B(Foo foo) {
         this.foo = foo;
-        this.phaser = phaser;
-        phaser.register();
     }
 
     @Override
     public void run() {
-        while (!phaser.isTerminated()) {
-            if (phaser.getPhase() == 1) {
-                foo.second();
-                phaser.arriveAndDeregister();
-                break;
-            } else phaser.arriveAndAwaitAdvance();
-        }
+        foo.second();
     }
 }
 
 class C implements Runnable {
     Foo foo;
-    Phaser phaser;
 
-    public C(Foo foo, Phaser phaser) {
+    public C(Foo foo) {
         this.foo = foo;
-        this.phaser = phaser;
-        phaser.register();
     }
 
     @Override
     public void run() {
-        while (!phaser.isTerminated()) {
-            if (phaser.getPhase() == 2) {
-                foo.third();
-                phaser.arriveAndDeregister();
-                break;
-            } else phaser.arriveAndAwaitAdvance();
-        }
+        foo.third();
     }
 }
