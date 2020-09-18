@@ -2,20 +2,20 @@ package main.java.com.vz89.javacore.chapter28;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 
 class Foo {
+    Semaphore semaphore = new Semaphore(3);
     int num = 3;
     int i = 1;
 
-    public synchronized void first() {
+    public void first() {
         while (i <= num) {
-            if (i == 1) {
+            if (semaphore.availablePermits() == 3) {
                 System.out.print("first");
                 i++;
-                notifyAll();
-            } else {
                 try {
-                    wait();
+                    semaphore.acquire();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -23,15 +23,13 @@ class Foo {
         }
     }
 
-    public synchronized void second() {
+    public void second() {
         while (i <= num) {
-            if (i == 2) {
+            if (semaphore.availablePermits() == 2) {
                 System.out.print("second");
                 i++;
-                notifyAll();
-            } else {
                 try {
-                    wait();
+                    semaphore.acquire();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -39,15 +37,13 @@ class Foo {
         }
     }
 
-    public synchronized void third() {
+    public void third() {
         while (i <= num) {
-            if (i == 3) {
+            if (semaphore.availablePermits() == 1) {
                 System.out.print("third");
                 i++;
-                notifyAll();
-            } else {
                 try {
-                    wait();
+                    semaphore.acquire();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -61,9 +57,9 @@ public class HomeTaskOne {
         Foo foo = new Foo();
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
+        executorService.execute(new A(foo));
         executorService.execute(new C(foo));
         executorService.execute(new B(foo));
-        executorService.execute(new A(foo));
 
 
         executorService.shutdown();
