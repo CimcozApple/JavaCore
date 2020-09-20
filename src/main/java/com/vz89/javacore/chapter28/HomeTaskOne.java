@@ -1,5 +1,6 @@
 package main.java.com.vz89.javacore.chapter28;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -9,9 +10,10 @@ class Foo {
     int num = 3;
     int i = 1;
 
-    public void first() {
+    public void first(Runnable r) {
         while (i <= num) {
             if (semaphore.availablePermits() == 3) {
+                r.run();
                 System.out.print("first");
                 i++;
                 try {
@@ -23,9 +25,10 @@ class Foo {
         }
     }
 
-    public void second() {
+    public void second(Runnable r) {
         while (i <= num) {
             if (semaphore.availablePermits() == 2) {
+                r.run();
                 System.out.print("second");
                 i++;
                 try {
@@ -37,9 +40,10 @@ class Foo {
         }
     }
 
-    public void third() {
+    public void third(Runnable r) {
         while (i <= num) {
             if (semaphore.availablePermits() == 1) {
+                r.run();
                 System.out.print("third");
                 i++;
                 try {
@@ -57,50 +61,12 @@ public class HomeTaskOne {
         Foo foo = new Foo();
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-        executorService.execute(new A(foo));
-        executorService.execute(new C(foo));
-        executorService.execute(new B(foo));
+        CompletableFuture.runAsync(() -> foo.second(() -> {}),executorService);
+        CompletableFuture.runAsync(() -> foo.third(() -> {}),executorService);
+        CompletableFuture.runAsync(() -> foo.first(() -> {}),executorService);
 
-
-        executorService.shutdown();
     }
 }
 
-class A implements Runnable {
-    Foo foo;
 
-    public A(Foo foo) {
-        this.foo = foo;
-    }
 
-    @Override
-    public void run() {
-        foo.first();
-    }
-}
-
-class B implements Runnable {
-    Foo foo;
-
-    public B(Foo foo) {
-        this.foo = foo;
-    }
-
-    @Override
-    public void run() {
-        foo.second();
-    }
-}
-
-class C implements Runnable {
-    Foo foo;
-
-    public C(Foo foo) {
-        this.foo = foo;
-    }
-
-    @Override
-    public void run() {
-        foo.third();
-    }
-}
