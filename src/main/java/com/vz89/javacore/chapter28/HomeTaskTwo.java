@@ -28,6 +28,8 @@ public class HomeTaskTwo {
             fizzBuzz.fizzbuzz(() -> {
             });
         }, executorService);
+
+        executorService.shutdown();
     }
 }
 
