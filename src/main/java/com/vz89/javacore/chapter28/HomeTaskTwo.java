@@ -1,5 +1,6 @@
 package main.java.com.vz89.javacore.chapter28;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Condition;
@@ -9,13 +10,24 @@ import java.util.concurrent.locks.ReentrantLock;
 public class HomeTaskTwo {
     public static void main(String[] args) {
         FizzBuzz fizzBuzz = new FizzBuzz(15);
-        ExecutorService executorService = Executors.newFixedThreadPool(6);
-        executorService.execute(new Aclass(fizzBuzz));
-        executorService.execute(new Bclass(fizzBuzz));
-        executorService.execute(new Cclass(fizzBuzz));
-        executorService.execute(new Dclass(fizzBuzz));
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-        executorService.shutdown();
+        CompletableFuture.runAsync(() -> {
+            fizzBuzz.fizz(() -> {
+            });
+        }, executorService);
+        CompletableFuture.runAsync(() -> {
+            fizzBuzz.buzz(() -> {
+            });
+        }, executorService);
+        CompletableFuture.runAsync(() -> {
+            fizzBuzz.number(() -> {
+            });
+        }, executorService);
+        CompletableFuture.runAsync(() -> {
+            fizzBuzz.fizzbuzz(() -> {
+            });
+        }, executorService);
     }
 }
 
@@ -29,10 +41,11 @@ class FizzBuzz {
         this.n = n;
     }
 
-    public void fizz() {
+    public void fizz(Runnable r) {
         lock.lock();
         while (number <= n) {
             if (number % 3 == 0 && number % 5 > 0) {
+                r.run();
                 System.out.print("fizz");
                 number++;
                 condition.signalAll();
@@ -48,10 +61,11 @@ class FizzBuzz {
         lock.unlock();
     }
 
-    public void buzz() {
+    public void buzz(Runnable r) {
         lock.lock();
         while (number <= n) {
             if (number % 5 == 0 && number % 3 > 0) {
+                r.run();
                 System.out.print("buzz");
                 number++;
                 condition.signalAll();
@@ -65,10 +79,11 @@ class FizzBuzz {
         lock.unlock();
     }
 
-    public void fizzbuzz() {
+    public void fizzbuzz(Runnable r) {
         lock.lock();
         while (number <= n) {
             if (number % 5 == 0 && number % 3 == 0) {
+                r.run();
                 System.out.print("fizzbuzz");
                 number++;
                 condition.signalAll();
@@ -82,10 +97,11 @@ class FizzBuzz {
         lock.unlock();
     }
 
-    public synchronized void number() {
+    public synchronized void number(Runnable r) {
         lock.lock();
         while (number <= n) {
             if (number % 5 > 0 && number % 3 > 0) {
+                r.run();
                 System.out.print(number);
                 number++;
                 condition.signalAll();
@@ -100,55 +116,4 @@ class FizzBuzz {
     }
 }
 
-class Aclass implements Runnable {
-    private FizzBuzz fizzBuzz;
-
-    public Aclass(FizzBuzz fizzBuzz) {
-        this.fizzBuzz = fizzBuzz;
-    }
-
-    @Override
-    public void run() {
-        fizzBuzz.fizz();
-    }
-}
-
-class Bclass implements Runnable {
-    private FizzBuzz fizzBuzz;
-
-    public Bclass(FizzBuzz fizzBuzz) {
-        this.fizzBuzz = fizzBuzz;
-    }
-
-    @Override
-    public void run() {
-        fizzBuzz.buzz();
-    }
-}
-
-class Cclass implements Runnable {
-    private FizzBuzz fizzBuzz;
-
-    public Cclass(FizzBuzz fizzBuzz) {
-        this.fizzBuzz = fizzBuzz;
-    }
-
-    @Override
-    public void run() {
-        fizzBuzz.fizzbuzz();
-    }
-}
-
-class Dclass implements Runnable {
-    private FizzBuzz fizzBuzz;
-
-    public Dclass(FizzBuzz fizzBuzz) {
-        this.fizzBuzz = fizzBuzz;
-    }
-
-    @Override
-    public void run() {
-        fizzBuzz.number();
-    }
-}
 

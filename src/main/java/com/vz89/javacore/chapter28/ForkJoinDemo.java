@@ -45,6 +45,7 @@ public class ForkJoinDemo {
         SqrtTransform sqrtTransform = new SqrtTransform(nums, 0, nums.length);
         forkJoinPool.invoke(sqrtTransform);
 
+
         System.out.println("Часть преобразованной последовательности: ");
         for (int i = 0; i < 10; i++) {
             System.out.format("%.3f", nums[i]);
