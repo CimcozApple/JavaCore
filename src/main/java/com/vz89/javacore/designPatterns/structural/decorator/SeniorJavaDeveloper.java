@@ -11,6 +11,6 @@ public class SeniorJavaDeveloper extends DeveloperDecorator {
 
     @Override
     public String makeJob() {
-        return super.makeJob()+ makeCodeReview();
+        return super.makeJob() + makeCodeReview();
     }
 }

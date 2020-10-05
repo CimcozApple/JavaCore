@@ -16,7 +16,7 @@ public class Runner {
         sensors.add(sensorFactory.getSensorByType("pressure"));
         sensors.add(sensorFactory.getSensorByType("pressure"));
 
-        for (Sensor sensor:sensors) sensor.measureValue();
+        for (Sensor sensor : sensors) sensor.measureValue();
 
     }
 }
