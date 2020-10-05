@@ -1,6 +1,8 @@
 package main.java.com.vz89.javacore.myDesignPatternExamples.structural.proxy;
 
-public class ProxyData extends HardData {
+public class ProxyData implements Data {
+
+    private HardData hardData = new HardData();
 
     @Override
     public void getData() {
