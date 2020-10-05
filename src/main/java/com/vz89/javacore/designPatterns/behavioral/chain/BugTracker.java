@@ -9,7 +9,7 @@ public class BugTracker {
         reportNotifier.setNextNotifier(emailNotifier);
         emailNotifier.setNextNotifier(smsNotifier);
 
-        reportNotifier.notifyManager("Everyhing is ok", Priority.ROUTINE);
+        reportNotifier.notifyManager("Everything is ok", Priority.ROUTINE);
         reportNotifier.notifyManager("Something went wrong!", Priority.IMPORTANT);
         reportNotifier.notifyManager("Houston, we've had a problem!", Priority.ASAP);
     }
